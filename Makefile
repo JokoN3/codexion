@@ -1,9 +1,10 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = codexion
 
-SRCS = coders/main.c\
+SRCS = coders/main.c coders/parsing.c \
+		coders/parsing_utils.c \
 
 OBJS = $(SRCS:.c=.o)
 
