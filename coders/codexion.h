@@ -6,7 +6,7 @@
 /*   By: yoneshev <yoneshev@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/04/14 13:51:15 by yoneshev      #+#    #+#                 */
-/*   Updated: 2026/05/25 15:27:48 by yoneshev      ########   odam.nl         */
+/*   Updated: 2026/05/25 17:12:46 by yoneshev      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ typedef struct s_sim
 	int				dongle_cd;
 	int				scheduler;
 	long long		start_time;
-	struct s_coder *coders;
+	pthread_mutex_t	data_lock;
+	pthread_mutex_t	print_lock;
+	struct s_coder	*coders;
 	struct s_dongle	*dongles;
 }	t_sim;
 
@@ -50,8 +52,8 @@ typedef struct s_coder
 	pthread_t		thread_id;
 	int				compiles;
 	long long		last_compile;
-	t_dongle		left;
-	t_dongle		right;
+	t_dongle		*left;
+	t_dongle		*right;
 	pthread_mutex_t	coder_lock;
 	t_sim			*sim;
 }	t_coder;

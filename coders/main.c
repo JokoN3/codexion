@@ -6,7 +6,7 @@
 /*   By: yoneshev <yoneshev@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/04/14 13:53:16 by yoneshev      #+#    #+#                 */
-/*   Updated: 2026/05/25 15:21:24 by yoneshev      ########   odam.nl         */
+/*   Updated: 2026/05/25 17:34:05 by yoneshev      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,53 @@ void	print_sim_data(t_sim sim)
 	printf("Start time: %lld\n", sim.start_time);
 }
 
-int	start_sim(t_sim *sim)
+void	assign_dongles(t_sim *sim)
 {
-	
+	int	i;
+
+	i = 0;
+	while (i < sim->all_coders)
+	{
+		if (i == sim->all_coders - 1)
+		{
+			sim->coders[i].left = &sim->dongles[0];
+			sim->coders[i].right = &sim->dongles[i];
+		}
+		else
+		{
+			sim->coders[i].left = &sim->dongles[i];
+			sim->coders[i].right = &sim->dongles[i + 1];
+		}
+		i++;
+	}
+}
+
+
+int	init_sim(t_sim *sim)
+{
+	int	i;
+
+	i = 0;
+	sim->coders = malloc(sizeof(t_coder) * sim->all_coders);
+	if (!sim->coders)
+		return (-1);
+	sim->dongles = malloc(sizeof(t_dongle) * sim->all_coders);
+	if (!sim->dongles)
+		return (free(sim->coders), -1);
+	pthread_mutex_init(&sim->data_lock, NULL);
+	pthread_mutex_init(&sim->print_lock, NULL);
+	while (i < sim->all_coders)
+	{
+		pthread_mutex_init(&sim->dongles[i].mutex, NULL);
+		sim->dongles[i].last_used = 0;
+		sim->coders[i].id = i + 1;
+		sim->coders[i].sim = sim;
+		sim->coders[i].compiles = 0;
+		pthread_mutex_init(&sim->coders[i].coder_lock, NULL);
+		i++;
+	}
+	assign_dongles(sim);
+	return (0);
 }
 
 int main(int ac, char **av)
