@@ -5,6 +5,7 @@ NAME = codexion
 
 SRCS = coders/main.c coders/parsing.c \
 		coders/parsing_utils.c \
+		coders/time.c \
 
 OBJS = $(SRCS:.c=.o)
 

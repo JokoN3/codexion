@@ -6,7 +6,7 @@
 /*   By: yoneshev <yoneshev@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/04/14 13:53:16 by yoneshev      #+#    #+#                 */
-/*   Updated: 2026/05/14 17:28:42 by yoneshev      ########   odam.nl         */
+/*   Updated: 2026/05/25 15:21:24 by yoneshev      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ void	print_sim_data(t_sim sim)
 		printf("Scheduler: FIFO\n");
 	else if (sim.scheduler == EDF)
 		printf("Scheduler: EDF\n");
+	printf("Start time: %lld\n", sim.start_time);
+}
+
+int	start_sim(t_sim *sim)
+{
+	
 }
 
 int main(int ac, char **av)
@@ -37,6 +43,8 @@ int main(int ac, char **av)
 	if (parse_input(av, &sim_data) == 0)
 		return (printf("no\n"), 1);
 	av--;
+	sim_data.start_time = get_time_ms();
 	print_sim_data(sim_data);
+	
 	return (0);
 }
